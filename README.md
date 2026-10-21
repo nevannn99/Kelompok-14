@@ -23,7 +23,7 @@ Program menghasilkan jadwal kuliah, mengekspor jadwal ke file CSV, serta menampi
 Jalankan perintah berikut pada terminal:
 
 ```bash
-git clone https://github.com/noyanm99/Kelompok-14.git
+git clone https://github.com/nevannn99/Kelompok-14.git
 cd Kelompok-14
 ```
 
