@@ -16,11 +16,10 @@ HARI = ("SENIN", "SELASA", "RABU", "KAMIS", "JUMAT")
 SLOT_PER_HARI = 5
 N_SLOT = len(HARI) * SLOT_PER_HARI  # 25 Slot
 
-# Pemetaan String Jam untuk Output
 JAM_MULAI = ["07:00", "09:30", "12:50", "15:20", "17:50"]
 JAM_SELESAI = ["09:30", "12:00", "15:20", "17:50", "20:20"]
 
-# 20 Mata Kuliah dengan Tepat 8 Dosen Unik
+# 20 Mata Kuliah dengan Tepat 8 Dosen Unik (Kelas A & B)
 MATA_KULIAH = [
     # --- KELAS A ---
     {"kode": "MK01", "nama": "Algoritma & Pemrograman", "dosen": "NOVERA KRISTIANTI, S.T., M.T.", "kelas": "A", "mhs": 40},
@@ -48,7 +47,7 @@ MATA_KULIAH = [
 ]
 N_MK = len(MATA_KULIAH)
 
-# 5 Ruang dengan Kapasitas Berbeda
+# 5 Ruang
 RUANGAN = [
     {"kode": "R1 (Kap 45)", "kap": 45}, 
     {"kode": "R2 (Kap 45)", "kap": 45}, 
@@ -57,6 +56,3 @@ RUANGAN = [
     {"kode": "R5 (Kap 30)", "kap": 30}
 ]
 N_RUANG = len(RUANGAN)
-
-
-
