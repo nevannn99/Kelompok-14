@@ -20,7 +20,8 @@ Program menghasilkan jadwal kuliah, mengekspor jadwal ke file CSV, serta menampi
 
 ### 1. Clone Repository
 
-Jalankan perintah berikut pada terminal:
+Jangan lupa menginstall GIT di ```https://git-scm.com/```
+lalu jalankan perintah berikut pada terminal:
 
 ```bash
 git clone https://github.com/nevannn99/Kelompok-14.git
