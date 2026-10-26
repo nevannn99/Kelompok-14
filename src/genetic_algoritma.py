@@ -94,3 +94,82 @@ def hitung_pelanggaran_keras(kromosom):
 def hitung_fitness(kromosom):
     pelanggaran = hitung_pelanggaran_keras(kromosom)
     return 1.0 / (1.0 + pelanggaran)
+    
+# =====================================================================
+# [POIN 4] OPERATOR GENETIKA & LOOP EVOLUSI
+# =====================================================================
+def inisialisasi_populasi(ukuran_populasi):
+    populasi = []
+    for _ in range(ukuran_populasi):
+        kromosom = [(random.randint(0, N_SLOT - 1), random.randint(0, N_RUANG - 1)) for _ in range(N_MK)]
+        populasi.append(kromosom)
+    return populasi
+
+def seleksi_turnamen(populasi, k=3):
+    peserta = random.sample(populasi, k)
+    return max(peserta, key=hitung_fitness)
+
+def crossover_uniform(p1, p2):
+    anak1, anak2 = [], []
+    for gen1, gen2 in zip(p1, p2):
+        if random.random() < 0.5:
+            anak1.append(gen1); anak2.append(gen2)
+        else:
+            anak1.append(gen2); anak2.append(gen1)
+    return anak1, anak2
+
+def mutasi_acak(kromosom, prob_mutasi):
+    for i in range(N_MK):
+        if random.random() < prob_mutasi:
+            kromosom[i] = (random.randint(0, N_SLOT - 1), random.randint(0, N_RUANG - 1))
+    return kromosom
+
+def jalankan_ga(seed):
+    random.seed(seed)
+    POP_SIZE = 100
+    MAX_GEN = 200
+    P_CROSSOVER = 0.8
+    P_MUTASI = 0.05
+    ELITISM = 2
+    
+    populasi = inisialisasi_populasi(POP_SIZE)
+    riwayat_terbaik, riwayat_rata2 = [], []
+    gen_valid_pertama = None
+    
+    for gen in range(MAX_GEN):
+        populasi = sorted(populasi, key=hitung_fitness, reverse=True)
+        fitness_terbaik = hitung_fitness(populasi[0])
+        fitness_rata2 = statistics.mean(hitung_fitness(k) for k in populasi)
+        
+        riwayat_terbaik.append(fitness_terbaik)
+        riwayat_rata2.append(fitness_rata2)
+        
+        if gen_valid_pertama is None and hitung_pelanggaran_keras(populasi[0]) == 0:
+            gen_valid_pertama = gen
+            
+        populasi_baru = populasi[:ELITISM]
+        
+        while len(populasi_baru) < POP_SIZE:
+            p1 = seleksi_turnamen(populasi) 
+            p2 = seleksi_turnamen(populasi)
+            
+            if random.random() < P_CROSSOVER:
+                a1, a2 = crossover_uniform(p1, p2)
+            else:
+                a1, a2 = list(p1), list(p2)
+                
+            a1 = mutasi_acak(a1, P_MUTASI)
+            a2 = mutasi_acak(a2, P_MUTASI)
+            populasi_baru.extend([a1, a2])
+            
+        populasi = populasi_baru[:POP_SIZE]
+        
+    populasi = sorted(populasi, key=hitung_fitness, reverse=True)
+    return {
+        "best_kromosom": populasi[0],
+        "fitness": hitung_fitness(populasi[0]),
+        "pelanggaran": hitung_pelanggaran_keras(populasi[0]),
+        "gen_valid": gen_valid_pertama,
+        "riwayat_terbaik": riwayat_terbaik,
+        "riwayat_rata2": riwayat_rata2
+    }
