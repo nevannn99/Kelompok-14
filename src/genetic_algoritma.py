@@ -56,3 +56,41 @@ RUANGAN = [
     {"kode": "R5 (Kap 30)", "kap": 30}
 ]
 N_RUANG = len(RUANGAN)
+
+# =====================================================================
+# [POIN 2 & 3] REPRESENTASI KROMOSOM & FUNGSI FITNESS
+# =====================================================================
+def hitung_pelanggaran_keras(kromosom):
+    per_slot = {}
+    for i, (slot, ruang) in enumerate(kromosom):
+        if slot not in per_slot: per_slot[slot] = []
+        per_slot[slot].append(i)
+
+    dosen_bentrok = 0
+    ruang_bentrok = 0
+    kelas_bentrok = 0
+    
+    for slot, mk_indices in per_slot.items():
+        if len(mk_indices) < 2: continue
+        
+        dosen_counts, ruang_counts, kelas_counts = {}, {}, {}
+        for i in mk_indices:
+            mk = MATA_KULIAH[i]
+            dosen_counts[mk['dosen']] = dosen_counts.get(mk['dosen'], 0) + 1
+            ruang_counts[kromosom[i][1]] = ruang_counts.get(kromosom[i][1], 0) + 1
+            kelas_counts[mk['kelas']] = kelas_counts.get(mk['kelas'], 0) + 1
+            
+        dosen_bentrok += sum(c * (c - 1) // 2 for c in dosen_counts.values())
+        ruang_bentrok += sum(c * (c - 1) // 2 for c in ruang_counts.values())
+        kelas_bentrok += sum(c * (c - 1) // 2 for c in kelas_counts.values())
+
+    kapasitas_kurang = 0
+    for i, (_, r) in enumerate(kromosom):
+        if MATA_KULIAH[i]['mhs'] > RUANGAN[r]['kap']:
+            kapasitas_kurang += 1
+
+    return dosen_bentrok + ruang_bentrok + kelas_bentrok + kapasitas_kurang
+
+def hitung_fitness(kromosom):
+    pelanggaran = hitung_pelanggaran_keras(kromosom)
+    return 1.0 / (1.0 + pelanggaran)
