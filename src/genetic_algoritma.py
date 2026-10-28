@@ -216,35 +216,35 @@ def tampilkan_output_tabel(best_res):
     # Urutkan jadwal berdasarkan urutan hari & jam
     jadwal_list.sort(key=lambda x: x["sort_key"])
 
- # =====================================================================
-    # PRINT TAMPIL TABEL DAN CSV DAN GRAFIK
-    # =====================================================================
-    # Cetak Format Tabel (Nomor urut pakai enumerate)
-    print(f"{'No':<4} | {'Kode':<6} | {'Mata Kuliah':<30} | {'Kelas':<6} | {'Dosen Ampu':<45} | {'Jadwal Kuliah'}")
-    print("-" * 150)
-    for idx, row in enumerate(jadwal_list, start=1):
-        print(f"{idx:<4} | {row['kode']:<6} | {row['mata_kuliah']:<30} | {row['kelas']:<6} | {row['dosen']:<45} | {row['jadwal']}")
+# ===================================================================== 
+# PRINT TAMPIL TABEL DAN CSV DAN GRAFIK
+# =====================================================================
+# Cetak Format Tabel (Nomor urut pakai enumerate)
+print(f"{'No':<4} | {'Kode':<6} | {'Mata Kuliah':<30} | {'Kelas':<6} | {'Dosen Ampu':<45} | {'Jadwal Kuliah'}")
+print("-" * 150)
+for idx, row in enumerate(jadwal_list, start=1):
+    print(f"{idx:<4} | {row['kode']:<6} | {row['mata_kuliah']:<30} | {row['kelas']:<6} | {row['dosen']:<45} | {row['jadwal']}")
 
-    # Ekspor ke CSV
-    with open("jadwal_uts_terbaik.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["No", "Kode", "Mata Kuliah", "Kelas", "Dosen Ampu", "Jadwal Kuliah"])
-        for idx, row in enumerate(jadwal_list, start=1):
-            writer.writerow([idx, row['kode'], row['mata_kuliah'], row['kelas'], row['dosen'], row['jadwal']])
-    print("\n[INFO] Jadwal diekspor ke 'jadwal_uts_terbaik.csv'")
+# Ekspor ke CSV
+with open("jadwal_uts_terbaik.csv", "w", newline="") as f:
+writer = csv.writer(f)
+writer.writerow(["No", "Kode", "Mata Kuliah", "Kelas", "Dosen Ampu", "Jadwal Kuliah"])
+for idx, row in enumerate(jadwal_list, start=1):
+    writer.writerow([idx, row['kode'], row['mata_kuliah'], row['kelas'], row['dosen'], row['jadwal']])
+print("\n[INFO] Jadwal diekspor ke 'jadwal_uts_terbaik.csv'")
 
-    # Grafik Konvergensi
-    plt.figure(figsize=(10, 5))
-    plt.plot(best_res["riwayat_terbaik"], label="Fitness Terbaik", color='#2ca02c', linewidth=2)
-    plt.plot(best_res["riwayat_rata2"], label="Fitness Rata-rata", color='#ff7f0e', linestyle='--')
-    plt.title("Grafik Konvergensi AG (Hasil Terbaik dari 10 Run)")
-    plt.xlabel("Generasi")
-    plt.ylabel("Nilai Fitness")
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.savefig("grafik_konvergensi_uts.png")
-    print("[INFO] Grafik konvergensi disimpan sebagai 'grafik_konvergensi_uts.png'")
-    plt.show()
+# Grafik Konvergensi
+plt.figure(figsize=(10, 5))
+plt.plot(best_res["riwayat_terbaik"], label="Fitness Terbaik", color='#2ca02c', linewidth=2)
+plt.plot(best_res["riwayat_rata2"], label="Fitness Rata-rata", color='#ff7f0e', linestyle='--')
+plt.title("Grafik Konvergensi AG (Hasil Terbaik dari 10 Run)")
+plt.xlabel("Generasi")
+plt.ylabel("Nilai Fitness")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.savefig("grafik_konvergensi_uts.png")
+print("[INFO] Grafik konvergensi disimpan sebagai 'grafik_konvergensi_uts.png'")
+plt.show()
 
 if __name__ == "__main__":
     hasil_terbaik = eksperimen_10_run()
