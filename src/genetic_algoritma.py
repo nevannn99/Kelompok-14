@@ -173,3 +173,45 @@ def jalankan_ga(seed):
         "riwayat_terbaik": riwayat_terbaik,
         "riwayat_rata2": riwayat_rata2
     }
+
+# =====================================================================
+# [POIN 5 & 6] PENGUJIAN AWAL & OUTPUT TABEL  
+# =====================================================================
+def eksperimen_10_run():
+    print("=== [POIN 5] PENGUJIAN AWAL: 10 RUN DENGAN SEED BERBEDA ===")
+    best_res_overall = None
+    
+    for i in range(10):
+        seed = i + 1
+        res = jalankan_ga(seed)
+        print(f"Run {seed:2d} | Fitness: {res['fitness']:.4f} | Bentrok: {res['pelanggaran']:2d} | Gen Valid Pertama: {res['gen_valid']}")
+        
+        if best_res_overall is None or res['fitness'] > best_res_overall['fitness']:
+            best_res_overall = res
+            
+    print("-" * 65)
+    return best_res_overall
+
+def tampilkan_output_tabel(best_res):
+    print("\n" + "="*150)
+    print("OUTPUT JADWAL KULIAH TERBAIK (Format Tabel)")
+    print("="*150)
+    
+    jadwal_list = []
+    for i, (slot, ruang) in enumerate(best_res["best_kromosom"]):
+        hari_idx = slot // SLOT_PER_HARI
+        jam_idx = slot % SLOT_PER_HARI
+        
+        jadwal_string = f"{HARI[hari_idx]}, {JAM_MULAI[jam_idx]}-{JAM_SELESAI[jam_idx]} DI {RUANGAN[ruang]['kode']}"
+        
+        jadwal_list.append({
+            "kode": MATA_KULIAH[i]['kode'],
+            "mata_kuliah": MATA_KULIAH[i]['nama'],
+            "kelas": MATA_KULIAH[i]['kelas'],
+            "dosen": MATA_KULIAH[i]['dosen'],
+            "jadwal": jadwal_string,
+            "sort_key": slot
+        })
+        
+    # Urutkan jadwal berdasarkan urutan hari & jam
+    jadwal_list.sort(key=lambda x: x["sort_key"])
